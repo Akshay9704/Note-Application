@@ -8,7 +8,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import EditModal from './editModal';
 import Helper from '../helper';
 
-const Notes = ({ fetchNotes, element, notes, setNotes, showNotes, setShowNotes, setPinnedNotes }) => {
+const Notes = ({ fetchNotes, element, notes, setNotes, setPinnedNotes }) => {
     const [modalShow, setModalShow] = useState(false);
     const [editTitle, setEditTitle] = useState('');
     const [editTagline, setEditTagline] = useState('');
@@ -31,22 +31,15 @@ const Notes = ({ fetchNotes, element, notes, setNotes, showNotes, setShowNotes, 
         fetchNotes();
     };
 
-    const pinHandler = (id) => {
-        const noteToPin = notes.find((item) => item.id === id);
-        if (noteToPin) {
-            setPinnedNotes([{
-                title: noteToPin.title,
-                tagline: noteToPin.tagline,
-                desc: noteToPin.desc
-            }]);
-        }
-        setShowNotes(false);
-    };
+    const pinHandler = (element) => {
+        const pinNote = notes.filter(data => data.id !== element.id);
+        setNotes(pinNote);
+        setPinnedNotes(prevArr => [element, ...prevArr]);
+    };    
 
     return (
         <div className='flex flex-col gap-10'>
             <section className="grid grid-cols-3 grid-rows-1">
-                {showNotes && (
                     <Card
                         className="other-cards"
                         style={{ width: '18rem', backgroundColor: 'rgb(177, 177, 177)' }}
@@ -61,7 +54,7 @@ const Notes = ({ fetchNotes, element, notes, setNotes, showNotes, setShowNotes, 
                                 >
                                     <span className="d-inline-block">
                                         <TiPinOutline
-                                            onClick={() => pinHandler(element.id)}
+                                            onClick={() => pinHandler(element)}
                                             className="text-2xl cursor-pointer"
                                         />
                                     </span>
@@ -100,7 +93,6 @@ const Notes = ({ fetchNotes, element, notes, setNotes, showNotes, setShowNotes, 
                             </Card.Text>
                         </Card.Body>
                     </Card>
-                )}
             </section>
             <EditModal
                 editTitle={editTitle}

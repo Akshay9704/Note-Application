@@ -30,7 +30,6 @@ const InputField = ({ title, setTitle, tagline, setTagline, desc, setDesc, setNo
 
     const addNoteHandler = async (e) => {
         e.preventDefault();
-
         if (title !== "" && tagline !== "" && desc !== "") {
             try {
                 await Note({
